@@ -15,13 +15,13 @@ public class VowelParser {
         this.input = input;
     }
 
-    public String parse() throws IllegalAccessException {
-        if ("".equals(input)) {
-            throw new IllegalAccessException("Input cannot be empty");
+    public String parse() throws IllegalStateException {
+        if (input == null || "".equals(input) || " ".equals(input)) {
+            throw new IllegalStateException("Input cannot be empty");
         }
         String[] words = input.split(" ");
-        int count = 0;
-        trimWords(words, count);
+//        int count = 0;
+        words = trimWords(words);
         Arrays.stream(words).forEach(w -> log.info("words[] --> " + w));
         StringBuilder keyBuilder = null;
         Map<VowelMapKey, VowelMapValue> vowelCountMap = new HashMap<VowelMapKey, VowelMapValue>();
@@ -78,10 +78,17 @@ public class VowelParser {
         return counter;
     }
 
-    private void trimWords(String[] words, int count) {
+    private String[] trimWords(String[] words) {
+        List<String> newTrimmedWords = new ArrayList<String>();
         for (String word : words) {//trimming words - removing punctuations or special characters.
-            words[count++] = word.replaceAll("[^A-Za-z0-9]", "");
+            String trimmedWord = word.replaceAll("[^A-Za-z0-9]", "");
+            if (!trimmedWord.isEmpty()) {
+                newTrimmedWords.add(trimmedWord);
+            }
         }
+        String[] newTrimmedWordArray = new String[newTrimmedWords.size()];
+        newTrimmedWordArray = newTrimmedWords.toArray(newTrimmedWordArray);
+        return newTrimmedWordArray;
     }
 
     private Set<String> getVowelsSetFromWords(String word) {

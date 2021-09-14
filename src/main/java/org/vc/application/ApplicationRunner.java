@@ -17,7 +17,7 @@ public class ApplicationRunner {
         String output = null;
         try {
             output = vowelParser.parse();
-        } catch (IllegalAccessException e) {
+        } catch (IllegalStateException e) {
             log.error(e.getMessage());
         }
         Path outputFilePath = Paths.get("src/main/resources/OUTPUT.txt");
